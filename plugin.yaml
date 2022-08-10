@@ -1,0 +1,17 @@
+plugin:
+    name: 'yfktn.backenduserregistration::lang.plugin.name'
+    description: 'yfktn.backenduserregistration::lang.plugin.description'
+    author: Yfktn
+    icon: oc-icon-user-plus
+    homepage: ''
+permissions:
+    yfktn.backenduserregistration.manajer:
+        tab: 'Backend User Registration'
+        label: 'Manager backend user registration.'
+navigation:
+    main-menu-bur:
+        label: 'Backend  Reg'
+        url: yfktn/backenduserregistration/backenduserregistration
+        icon: icon-user-plus
+        permissions:
+            - yfktn.backenduserregistration.manajer

@@ -1,0 +1,10 @@
+name: BackendUserRegistration
+form: $/yfktn/backenduserregistration/models/backenduserregistration/fields.yaml
+modelClass: Yfktn\BackendUserRegistration\Models\BackendUserRegistration
+defaultRedirect: yfktn/backenduserregistration/backenduserregistration
+create:
+    redirect: 'yfktn/backenduserregistration/backenduserregistration/update/:id'
+    redirectClose: yfktn/backenduserregistration/backenduserregistration
+update:
+    redirect: yfktn/backenduserregistration/backenduserregistration
+    redirectClose: yfktn/backenduserregistration/backenduserregistration

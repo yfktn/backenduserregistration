@@ -1,0 +1,92 @@
+{% set dataBUR = __SELF__.dataBUR %}
+{% set targetPartial = "'" ~ __SELF__ ~ "::okeh': '#ourForm'" %}
+<form data-request="{{ __SELF__ }}::onRegister" 
+    data-request-update="{{targetPartial|raw}}"
+    data-request-validate>
+<div class="form-elements" role="form" id="ourForm">
+    <div class="form-group text-field october">
+
+        <!-- Login -->
+        <span id="loginHelp" class="form-text">
+            Masukkan login dengan karakter yang diperbolehkan hanyalah huruf, angka dan karakter garis bawah.
+        </span>
+        <input
+            type="text"
+            name="login"
+            value="{{ dataBUR['post']['login'] }}"
+            class="form-control icon user m-b"
+            placeholder="Masukkan Login"
+            autocomplete="off"
+            maxlength="255" />
+        <div data-validate-for="login"></div>
+
+        <!-- Email -->
+        <span id="loginHelp" class="form-text">
+            Masukkan email valid anda.
+        </span>
+        <input
+            type="email"
+            name="email"
+            value="{{ dataBUR['post']['email'] }}"
+            class="form-control icon user m-b"
+            placeholder="Masukkan Email"
+            autocomplete="off"
+            maxlength="255" />
+        <div data-validate-for="email"></div>
+
+        {% if(dataBUR['settings']['need_user_activation']) == false %}
+        <!-- Password -->
+        <span id="loginHelp" class="form-text">
+            Ketikkan password dengan panjang minimal 8 karakter.
+        </span>
+        <input
+            type="password"
+            name="password"
+            value=""
+            class="form-control icon lock m-b"
+            placeholder="Ketikkan Password"
+            autocomplete="off"
+            maxlength="255" />
+        <div data-validate-for="password"></div>
+
+        <!-- Password Confirmation -->
+        <input
+            type="password"
+            name="password_confirmation"
+            value=""
+            class="form-control icon lock m-b"
+            placeholder="Ketikkan Ulang Password"
+            autocomplete="off"
+            maxlength="255" />
+        <div data-validate-for="password_confirmation"></div>
+        {% else %}
+        <div class="alert alert-info">
+            Password login default akan dikirimkan kepada email yang anda masukkan. Pastikan 
+            untuk melakukan pengecekan di folder spam apabila email kami belum masuk ke inbox utama.
+        </div>
+        {% endif %}
+
+        <label for="terms" class="text-primary">
+            <h4>
+                <input type="checkbox" id="terms" name="terms"> Saya setuju dengan ketentuan yang berlaku.
+            </h4>
+        </label>
+
+        <div class="alert alert-danger text-white" data-validate-error>
+            <p data-message></p>
+        </div>
+    </div>
+    <div class="flex">
+        <!-- Submit Login -->
+        <button type="submit" class="btn btn-primary" data-attach-loading>
+            Register
+        </button>
+    </div>
+
+</div>
+
+</form>
+
+{% put scripts %}
+    {% framework extras %}
+{% endput %}

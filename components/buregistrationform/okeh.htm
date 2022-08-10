@@ -1,0 +1,21 @@
+{% set dataBUR = __SELF__.dataBUR %}
+
+<h3>Berhasil Melakukan Register</h3>
+
+<p>Anda login menggunakan userid: <strong>{{ dataBUR ['post']['login'] }}</strong>.</p>
+
+{% if dataBUR['settings']['need_user_activation'] %}
+<div class="alert alert-info">
+    Password login default akan dikirimkan kepada email {{ dataBUR['post']['email'] }} yang anda masukkan. Pastikan 
+    untuk melakukan pengecekan di folder spam apabila email kami belum masuk ke inbox utama.
+</div>
+{% endif %}
+
+{% if dataBUR['settings']['need_approve'] %}
+<div class="alert alert-info">
+    Manajemen memutuskan bahwa user anda membutuhkan proses approve untuk dapat melakukan login ke system.
+</div>
+{% endif %}
+
+
+<p>Silahkan melanjutkan langkah selanjutnya dengan melakukan login di <a href="{{ dataBUR['backendurl'] }}">halaman login user</a>.</p>

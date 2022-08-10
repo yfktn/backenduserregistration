@@ -1,0 +1,12 @@
+columns:
+    is_approved:
+        label: is_approved
+        type: switch
+    created_at:
+        label: created_at
+        type: datetime
+        invisible: true
+    updated_at:
+        label: updated_at
+        type: datetime
+        invisible: true

@@ -1,0 +1,6 @@
+fields:
+    is_approved:
+        label: 'Switch On To Approve This User'
+        span: full
+        type: switch
+        comment: 'New user can''t login until approved by manager.'
