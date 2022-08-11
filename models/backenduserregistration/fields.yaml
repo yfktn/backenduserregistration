@@ -1,4 +1,8 @@
 fields:
+    _userbackendnya:
+        label: User Data
+        type: partial
+        path: $/yfktn/backenduserregistration/models/backenduserregistration/_render_userbackendnya.htm
     is_approved:
         label: 'Switch On To Approve This User'
         span: full

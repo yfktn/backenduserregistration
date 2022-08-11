@@ -1,0 +1,27 @@
+<?php
+// we have model
+//
+$userBackend = $model->backendUser;
+?>
+<div class="control-list">
+    <table class="table table-condensed table-bordered data">
+        <thead>
+            <tr>
+                <th><span>Login</span></th>
+                <th><span>Email</span></th>
+                <th><span>Created</span></th>
+                <th><span>First Name</span></th>
+                <th><span>Last Name</span></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><?= $userBackend->login ?></td>
+                <td><?= $userBackend->email ?></td>
+                <td><?= $userBackend->created_at->format("d-m-Y") ?></td>
+                <td><?= $userBackend->first_name ?></td>
+                <td><?= $userBackend->last_name ?></td>
+            </tr>
+        </tbody>
+    </table>
+</div>

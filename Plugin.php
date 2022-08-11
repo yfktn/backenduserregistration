@@ -1,9 +1,14 @@
 <?php namespace Yfktn\BackendUserRegistration;
 
+use BackendAuth;
+use Event;
+use Flash;
 use System\Classes\PluginBase;
+use Yfktn\BackendUserRegistration\Models\BackendUserRegistration;
 
 class Plugin extends PluginBase
 {
+
     public function boot()
     {
         // ada bug pada saat melakukan register, nilai password_confirmation selalu failed
@@ -20,11 +25,41 @@ class Plugin extends PluginBase
             });
     
         });
+
+        // don't let current registered user login if he/she not approved yet by the management!
+        Event::listen('backend.user.login', function (\Backend\Models\User $user) {
+            // search backend user 
+            $bur = BackendUserRegistration::where('user_id', $user->id)->first();
+            if($bur !== null) {
+                if( (bool)$bur->is_approved != true) {
+                    // force logoff
+                    Flash::error("Kami mohon maaf, user anda belum di-approved oleh manajemen");
+                    BackendAuth::logout();
+                } else {
+                    // nothing to do!
+                }
+            }
+        });
     }
+
     public function registerComponents()
     {
         return [
             \Yfktn\BackendUserRegistration\Components\BURegistrationForm::class => 'BURegistrationForm',
+        ];
+    }
+
+    public function registerMarkupTags()
+    {
+        return [
+            'functions' => [
+                'userBackendSignedIn' => function() {
+                    return BackendAuth::check();
+                },
+                'backendUrl' => function() {
+                    return config('cms.backendUri', config('backend.uri'));
+                },
+            ]
         ];
     }
 

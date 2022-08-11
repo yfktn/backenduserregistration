@@ -1,6 +1,10 @@
 columns:
+    theuser:
+        label: Registered User
+        relation: backendUser
+        select: concat(login, ' (', email, ')')
     is_approved:
-        label: is_approved
+        label: Is Approved
         type: switch
     created_at:
         label: created_at

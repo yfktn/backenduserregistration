@@ -31,6 +31,20 @@ class BURegistrationForm extends ComponentBase
         ];
     }
 
+    public function init()
+    {
+        $this->controller->addComponent(
+            \Pkurg\SiteCaptcha\Components\SiteCaptchaComponent::class, 
+            'sitecaptcha',
+            [
+                "type" => "flat",
+                "showrefresh" => "show",
+                "iconclass" => "icon-refresh-ccw"
+            ],
+            true
+        );
+    }
+
     public function defineProperties()
     {
         return [];
@@ -40,7 +54,7 @@ class BURegistrationForm extends ComponentBase
     {
         $this->dataBUR['settings'] = $this->settings = config('yfktn.backenduserregistration::settings');
         $this->dataBUR['post'] = post();  
-        $this->dataBUR['backendurl'] = config('cms.backendUri', config('backend.uri')); 
+        $this->dataBUR['backendurl'] = config('app.url') . config('cms.backendUri', config('backend.uri')); 
     }
 
     public function onRun()
@@ -56,16 +70,24 @@ class BURegistrationForm extends ComponentBase
             'email' => 'required|between:6,255|email|unique:backend_users',
             'login' => 'required|between:2,255|unique:backend_users',
             'password' => (!$this->settings['need_user_activation'] ? 'required:create|between:4,255|confirmed': null),
-            'password_confirmation' => (!$this->settings['need_user_activation'] ? 'required_with:password|between:4,255': null)
+            'password_confirmation' => (!$this->settings['need_user_activation'] ? 'required_with:password|between:4,255': null),
+            'captcha' => ($this->settings['show_captcha'] ? 'required|captcha_api:' . session('captcha.key'): null)
         ];
+        $rules = array_filter($rules, function($value) {
+            return $value !== null;
+        });
         $messages = [
             'accepted' => 'Setujui dahulu ketentuan.',
             'email' => 'Email dibutuhkan, tidak valid atau sudah ada yang menggunakan',
             'required' => ':attribute dibutuhkan untuk diisi!',
             'confirmed' => ':attribute tidak sama, coba check.',
             'password' => (!$this->settings['need_user_activation'] ? 'Membutuhkan Pengisian Password': null),
-            'password_confirmation' => (!$this->settings['need_user_activation'] ? 'Konfirmasi Password tidak sama': null)
+            'password_confirmation' => (!$this->settings['need_user_activation'] ? 'Konfirmasi Password tidak sama': null),
+            'captcha_api' => ($this->settings['show_captcha'] ? 'Karakter captcha tidak sama dengan yang muncul.': null)
         ];
+        $messages = array_filter($messages, function($value) {
+            return $value !== null;
+        });
         
         $validator = Validator::make($this->dataBUR['post'], $rules, $messages);
         
@@ -136,8 +158,12 @@ class BURegistrationForm extends ComponentBase
 
         if(!$failed && $this->settings['need_user_activation']) {
             $dateTrigger = Carbon::now()->addMinutes(1);
-            Queue::later($dateTrigger, SendEmailUserActivation::class, 
-                array_merge(post(), ['backendurl' => $this->dataBUR['backendurl']])
+            Queue::later($dateTrigger, SendEmailUserActivation::class, [
+                'login' => post('login'),
+                'email' => post('email'),
+                'password' => $password,
+                'backendurl' => $this->dataBUR['backendurl']
+            ]
             );
         }
 
