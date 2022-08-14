@@ -33,10 +33,10 @@ class Plugin extends PluginBase
             if($bur !== null) {
                 if( (bool)$bur->is_approved != true) {
                     // force logoff
-                    Flash::error("Kami mohon maaf, user anda belum di-approved oleh manajemen");
+                    Flash::error("Kami mohon maaf, user anda belum disetujui oleh manajemen.");
                     BackendAuth::logout();
                 } else {
-                    // nothing to do!
+                    Event::fire('yfktn.backenduserregistration.user_login');
                 }
             }
         });
@@ -56,7 +56,7 @@ class Plugin extends PluginBase
                 'userBackendSignedIn' => function() {
                     return BackendAuth::check();
                 },
-                'backendUrl' => function() {
+                'backendUri' => function() {
                     return config('cms.backendUri', config('backend.uri'));
                 },
             ]
